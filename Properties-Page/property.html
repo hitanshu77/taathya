@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore Ahmedabad's finest residential and commercial properties on an interactive 3D skyline map — Taathya Times Property Explorer">
+  <title>Property Explorer · Taathya Times</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Mapbox GL JS -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+
+  <!-- Project Styles -->
+  <link rel="stylesheet" href="propertyExplorer.css">
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       TRANSPARENT NAVBAR (mirrors main site)
+       ═══════════════════════════════════════════ -->
+  <nav class="prop-nav" id="prop-nav">
+    <div class="prop-nav-inner">
+      <!-- Logo + brand -->
+      <a href="../index.html" class="prop-nav-brand" aria-label="Taathya Home">
+        <img src="/burgandy_logo.png" alt="Taathya logo" class="prop-nav-logo-img">
+        <div class="prop-nav-brand-text">
+          <span class="prop-nav-brand-name">Taathya<sup>®</sup></span>
+          <span class="prop-nav-brand-tag">It's All About Benefit</span>
+        </div>
+      </a>
+
+      <!-- Desktop links -->
+      <div class="prop-nav-links">
+        <a href="../index.html#buy">Buy Property</a>
+        <a href="../index.html#loan">Get a Loan</a>
+        <a href="property.html" class="prop-nav-active">Properties</a>
+        <a href="/latest-updates">Latest Updates</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       HERO ZONE — sticky scroll (takes ~4 scrolls to leave)
+       ═══════════════════════════════════════════ -->
+  <div class="hero-zone" id="hero-zone">
+  <section class="hero-slideshow" id="hero-intro" aria-label="Property Showcase">
+
+    <!-- Slides (fullscreen images with slow Ken Burns zoom) -->
+    <div class="hero-slides" id="hero-slides" aria-hidden="true"></div>
+
+    <!-- Dark gradient overlay -->
+    <div class="hero-vignette"></div>
+
+    <!-- Builder badge (top-right, changes per slide) -->
+    <div class="hero-slide-label" id="hero-slide-label" aria-live="polite">
+      <span class="hero-label-counter" id="hero-label-counter">01 / 08</span>
+      <div class="hero-label-sep"></div>
+      <span class="hero-label-name" id="hero-label-name">Amaris</span>
+      <div class="hero-label-sep"></div>
+      <span class="hero-label-loc" id="hero-label-loc">South Bopal, Ahmedabad</span>
+    </div>
+
+    <!-- Centered title -->
+    <div class="hero-center">
+      <h1 class="hero-title">
+        <span class="hero-title-sub">Ahmedabad · Premium Properties</span>
+        Discover The City's Finest
+      </h1>
+    </div>
+
+    <!-- Slide progress dots (bottom center) -->
+    <div class="hero-dots" id="hero-dots"></div>
+
+    <!-- Scroll indicator -->
+    <div class="hero-scroll-cue" aria-hidden="true">
+      <div class="hero-scroll-line"></div>
+      <span class="hero-scroll-text">Scroll to explore</span>
+    </div>
+
+  </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       MAP ZONE — sticky scroll (~2 scrolls)
+       ═══════════════════════════════════════════ -->
+  <div class="map-zone" id="map-zone">
+  <section class="map-section" id="map-section">
+    <div class="map-shell" id="map-shell" aria-label="3D Property Map Explorer">
+
+      <!-- Mapbox map canvas -->
+      <div id="map" role="application" aria-label="Interactive 3D city property map"></div>
+
+      <!-- Map loading overlay — shows only while tiles are loading -->
+      <div id="map-loading" aria-live="polite">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <div class="loading-text">Mapping Ahmedabad's finest properties…</div>
+      </div>
+
+      <!-- Zoom indicator HUD -->
+      <div id="zoom-indicator" aria-live="polite" aria-atomic="true">City Overview</div>
+
+      <!-- Filters -->
+      <div class="map-filters-bar">
+        <div id="property-filters" role="toolbar" aria-label="Property filters"></div>
+      </div>
+
+    </div>
+  </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       CAROUSEL ZONE — sticky scroll (~2 scrolls)
+       ═══════════════════════════════════════════ -->
+  <div class="carousel-zone" id="carousel-zone">
+  <section class="carousel-section" id="carousel-section">
+    <div id="property-carousel" role="region" aria-label="Featured properties carousel"></div>
+  </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PROPERTY GRID — all properties, normal scroll
+       ═══════════════════════════════════════════ -->
+  <section class="grid-section" id="grid-section">
+    <div class="grid-section-header">
+      <h2>All Properties</h2>
+      <p>Browse the complete collection across Ahmedabad</p>
+    </div>
+    <div id="property-grid" class="property-grid"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       DATA SCRIPTS
+       ═══════════════════════════════════════════ -->
+  <script src="propertyCoordinates.js"></script>
+  <script src="propertycards.js"></script>
+  <script src="silhouetteProfiles.js"></script>
+  <script src="map.js"></script>
+  <script src="propertyCarousel.js"></script>
+
+  <!-- ═══════════════════════════════════════════
+       HERO SLIDESHOW ENGINE + SCROLL → MAP INIT
+       ═══════════════════════════════════════════ -->
+  <script>
+  (function () {
+    "use strict";
+
+    // Defensive bootstrap: never leave map spinner stuck on screen.
+    function safeHideMapLoading() {
+      const overlay = document.getElementById("map-loading");
+      if (!overlay || overlay.style.opacity === "0") return;
+      overlay.style.opacity = "0";
+      setTimeout(() => { if (overlay.parentNode) overlay.remove(); }, 700);
+    }
+
+    function kickoffMapInit() {
+      if (typeof window.initMapExplorer === "function") {
+        window.initMapExplorer();
+        return;
+      }
+      // If map.js hasn't executed yet, poll briefly then give up gracefully.
+      let tries = 0;
+      const wait = setInterval(() => {
+        if (typeof window.initMapExplorer === "function") {
+          clearInterval(wait);
+          window.initMapExplorer();
+          return;
+        }
+        tries += 1;
+        if (tries > 30) {
+          clearInterval(wait);
+          safeHideMapLoading();
+        }
+      }, 120);
+    }
+
+    setTimeout(kickoffMapInit, 50);
+    setTimeout(safeHideMapLoading, 2200);
+    window.addEventListener("error", safeHideMapLoading, { once: true });
+
+    // ── Ken Burns variants (cycle through for varied motion) ──
+    const KB_ANIMS = ["hero-kb-zi", "hero-kb-pr", "hero-kb-zo", "hero-kb-pl"];
+
+    // ── Slide data — cinematic high-resolution shots ──
+    const SLIDES = [
+      { img: "imagesss/Amaris-01.jpg",          property: "Amaris",           location: "South Bopal  ·  Ahmedabad" },
+      { img: "imagesss/the-aayansh-02.jpg",     property: "The Aayansh",      location: "Thaltej  ·  Ahmedabad" },
+      { img: "imagesss/Obisidian-2.png",        property: "Obsidian Towers",  location: "Jagatpur  ·  Ahmedabad" },
+      { img: "imagesss/dharti-sky-line-03.jpg", property: "Dharti Skyline",   location: "Chandkheda  ·  Ahmedabad" },
+      { img: "imagesss/Malabar-Retreat-2.png",  property: "Malabar Retreat",  location: "Chandlodiya  ·  Ahmedabad" },
+      { img: "imagesss/AATMANTAN-04.png",       property: "Aatmantan",        location: "Prahladnagar  ·  Ahmedabad" },
+      { img: "imagesss/Creek-03.jpeg",          property: "Creek",            location: "Prahlad Nagar  ·  Ahmedabad" },
+      { img: "imagesss/Amaryllis-01.jpg",       property: "Amaryllis",        location: "Shilaj Road  ·  Ahmedabad" },
+    ];
+
+    const INTERVAL = 7000;
+
+    const slidesContainer = document.getElementById("hero-slides");
+    const dotsContainer   = document.getElementById("hero-dots");
+    const labelCounter    = document.getElementById("hero-label-counter");
+    const labelName       = document.getElementById("hero-label-name");
+    const labelLoc        = document.getElementById("hero-label-loc");
+    const slideLabel      = document.getElementById("hero-slide-label");
+
+    let currentSlide = 0;
+    let slideTimer   = null;
+
+    // Build slide elements
+    SLIDES.forEach((s, i) => {
+      const el = document.createElement("div");
+      el.className = "hero-slide";
+      el.style.backgroundImage = `url('${s.img}')`;
+      if (i === 0) el.classList.add("hero-slide-active", KB_ANIMS[0]);
+      slidesContainer.appendChild(el);
+
+      const dot = document.createElement("button");
+      dot.className = "hero-dot" + (i === 0 ? " hero-dot-active" : "");
+      dot.setAttribute("aria-label", `Slide ${i + 1}: ${s.property}`);
+      dot.addEventListener("click", () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    });
+
+    function updateBadge(idx) {
+      const s = SLIDES[idx];
+      if (slideLabel) slideLabel.classList.remove("hero-label-visible");
+      setTimeout(() => {
+        if (labelCounter) labelCounter.textContent = String(idx + 1).padStart(2, "0") + " / " + String(SLIDES.length).padStart(2, "0");
+        if (labelName)    labelName.textContent    = s.property;
+        if (labelLoc)     labelLoc.textContent     = s.location;
+        if (slideLabel)   slideLabel.classList.add("hero-label-visible");
+      }, 400);
+    }
+
+    function goToSlide(idx) {
+      if (idx === currentSlide) return;
+      const slides = slidesContainer.querySelectorAll(".hero-slide");
+      const dots   = dotsContainer.querySelectorAll(".hero-dot");
+      // Deactivate current (remove all KB classes too)
+      slides[currentSlide].classList.remove("hero-slide-active", ...KB_ANIMS);
+      dots[currentSlide].classList.remove("hero-dot-active");
+      currentSlide = idx;
+      // Activate new slide with its unique KB animation
+      slides[currentSlide].classList.add("hero-slide-active", KB_ANIMS[currentSlide % KB_ANIMS.length]);
+      dots[currentSlide].classList.add("hero-dot-active");
+      updateBadge(currentSlide);
+      clearInterval(slideTimer);
+      slideTimer = setInterval(nextSlide, INTERVAL);
+    }
+
+    function nextSlide() { goToSlide((currentSlide + 1) % SLIDES.length); }
+
+    updateBadge(0);
+    slideTimer = setInterval(nextSlide, INTERVAL);
+
+    const heroIntro = document.getElementById("hero-intro");
+    const mapSectionEl = document.getElementById("map-section");
+    const carouselSectionEl = document.getElementById("carousel-section");
+
+    function updateCinematicScroll() {
+      const heroZone = document.getElementById("hero-zone");
+      if (!heroZone || !heroIntro) return;
+      const vh = window.innerHeight || 1;
+      const progress = Math.max(0, Math.min(1, window.scrollY / Math.max(heroZone.offsetHeight - vh, 1)));
+      heroIntro.classList.toggle("hero-fade", progress > 0.62);
+      if (mapSectionEl) mapSectionEl.classList.toggle("map-reveal", progress > 0.56);
+      if (carouselSectionEl) carouselSectionEl.classList.toggle("carousel-reveal", progress > 0.9);
+    }
+    window.addEventListener("scroll", updateCinematicScroll, { passive: true });
+    updateCinematicScroll();
+
+    // ── Init map immediately — does NOT require being in viewport ──────────
+    // Mapbox GL works fine with off-screen containers that have CSS dimensions.
+    // Waiting for IntersectionObserver means the timeout/error handlers in
+    // initMapExplorer are never registered, leaving the spinner stuck forever.
+    setTimeout(() => {
+      if (typeof window.initMapExplorer === "function") window.initMapExplorer();
+    }, 150);
+
+    // ── On scroll into view: force resize so WebGL canvas fills the shell ──
+    const mapObserver = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        if (typeof window.initMapExplorer === "function") window.initMapExplorer(); // resize guard inside
+        mapSectionEl?.classList.add("map-reveal");
+        mapObserver.disconnect();
+      });
+    }, { threshold: 0 });
+    const mapSection = document.getElementById("map-section");
+    if (mapSection) mapObserver.observe(mapSection);
+
+    const carouselObserver = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        carouselSectionEl?.classList.add("carousel-reveal");
+        carouselObserver.disconnect();
+      });
+    }, { threshold: 0.15 });
+    const carouselSection = document.getElementById("carousel-section");
+    if (carouselSection) carouselObserver.observe(carouselSection);
+
+    // ── Grid: build when grid section scrolls into view ──
+    const gridObserver = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        if (typeof window.buildPropertyGrid === "function") window.buildPropertyGrid();
+        gridObserver.disconnect();
+      });
+    }, { threshold: 0.05 });
+    const gridSection = document.getElementById("grid-section");
+    if (gridSection) gridObserver.observe(gridSection);
+
+    // ── Navbar: solid once hero zone fully passes ──
+    const nav      = document.getElementById("prop-nav");
+    const heroZone = document.getElementById("hero-zone");
+    if (nav && heroZone) {
+      const onScroll = () => {
+        const past = window.scrollY > heroZone.offsetHeight * 0.85;
+        nav.classList.toggle("prop-nav-solid", past);
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
+
+    // ── Zoom indicator HUD ──
+    function initZoomHUD() {
+      const zoomEl = document.getElementById("zoom-indicator");
+      if (!zoomEl) return;
+      const poll = setInterval(() => {
+        if (!document.querySelector("#map canvas")) return;
+        clearInterval(poll);
+        // map is a global const in map.js — poll for it
+        let attempts = 0;
+        const wait = setInterval(() => {
+          if (typeof mapInstance !== "undefined") {
+            clearInterval(wait);
+            attachZoomHUD(mapInstance, zoomEl);
+          } else if (++attempts > 20) {
+            clearInterval(wait);
+            zoomEl.style.display = "none";
+          }
+        }, 300);
+      }, 500);
+    }
+
+    function attachZoomHUD(mapInst, el) {
+      const labels = [
+        { max: 10, label: "Metro Overview" },
+        { max: 11, label: "City View" },
+        { max: 12, label: "Skyline Revealed" },
+        { max: 13, label: "Neighbourhood" },
+        { max: 14, label: "Street Level" },
+        { max: 99, label: "Building Detail" },
+      ];
+      function update() {
+        const z = mapInst.getZoom();
+        const entry = labels.find((l) => z <= l.max) || labels[labels.length - 1];
+        el.textContent = entry.label + " · " + z.toFixed(1) + "×";
+      }
+      mapInst.on("zoom", update);
+      mapInst.on("load", update);
+      update();
+    }
+
+    initZoomHUD();
+
+  })();
+  </script>
+
+</body>
+</html>

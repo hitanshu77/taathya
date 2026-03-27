@@ -1,0 +1,591 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=UnifrakturCook:wght@700&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --warm-white: 0 0% 100%;
+    --foreground: 220 20% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 14%;
+
+    --primary: 340 72% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 15% 95%;
+    --secondary-foreground: 340 72% 36%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 46%;
+
+    --accent: 45 90% 51%;
+    --accent-foreground: 220 20% 14%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 340 72% 36%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --hero-gradient: linear-gradient(135deg, hsl(340 72% 36%) 0%, hsl(340 60% 28%) 100%);
+    --hero-text-muted: 340 20% 75%;
+    --gold: 0 0% 100%;
+    --gold-foreground: 45 90% 20%;
+    --surface-glass: 0 0% 100% / 0.08;
+    --surface-elevated: 0 0% 100%;
+    --text-on-hero: 0 0% 100%;
+    --text-on-hero-muted: 340 20% 80%;
+    --section-alt-bg: 40 50% 96%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+@layer components {
+  .hero-gradient {
+    background: var(--hero-gradient);
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(var(--warm-white)) 0%, #fef3c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass-card {
+    background: hsl(var(--surface-glass));
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(0 0% 100% / 0.12);
+  }
+
+  .ticker-track {
+    display: flex;
+    animation: ticker-scroll 30s linear infinite;
+    width: max-content;
+  }
+
+  .section-alt {
+    background: hsl(var(--section-alt-bg));
+  }
+
+  .signature-badge {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(340 60% 28%));
+    color: hsl(var(--primary-foreground));
+  }
+}
+
+.hero-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+  opacity: 0.85;
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   NYT-Style Newspaper Layout — Latest Updates Page
+   ═══════════════════════════════════════════════════════
+
+   Font Stack (New York Times — Cheltenham system):
+   ┌─ Masthead nameplate : UnifrakturCook        (blackletter nameplate)
+   ├─ Display headline   : ITC Cheltenham / cheltenhamclassic (Cheltenham Bold — tight tracking)
+   ├─ Section headlines  : ITC Cheltenham / cheltenhamclassic (Cheltenham Regular weight)
+   ├─ Italic deck lines  : ITC Cheltenham / cheltenhamclassic (Cheltenham Italic)
+   ├─ Body / excerpt     : Georgia, 18px         (NYT's actual web body font)
+   └─ Labels / UI meta   : Franklin Gothic / Libre Franklin   (system font + web fallback)
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Display headline — ITC Cheltenham Bold, tight tracking ── */
+.nyt-display-headline {
+  font-family: "ITC Cheltenham", "Cheltenham", 'cheltenhamclassic', Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  line-height: 1.07;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+/* Section & column headlines — Cheltenham Regular weight */
+.nyt-serif,
+.nyt-headline {
+  font-family: "ITC Cheltenham", "Cheltenham", 'cheltenhamclassic', Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+/* Italic deck line — Cheltenham Italic for sub-headlines */
+.nyt-deck {
+  font-family: "ITC Cheltenham", "Cheltenham", 'cheltenhamclassic', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+}
+/* Article body — Georgia 18px (NYT's actual web body font) */
+.nyt-article-body {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  line-height: 1.6;
+  font-size: 1.125rem;
+  color: #333333;
+}
+/* Byline — Franklin Gothic uppercase, like NYT "By NAME" */
+.nyt-byline {
+  font-family: "Franklin Gothic Medium", "Franklin Gothic", 'Libre Franklin', Arial, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #555;
+}
+/* Labels, tags, meta, UI — Franklin Gothic (system) with Libre Franklin web fallback */
+.nyt-label {
+  font-family: "Franklin Gothic Medium", "Franklin Gothic", 'Libre Franklin', Arial, sans-serif;
+}
+/* Keep .nyt-body as alias for backward compat */
+.nyt-body {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+/* Masthead title — blackletter nameplate */
+.nyt-masthead-title {
+  font-family: 'cheltenhamclassic', 'ITC Cheltenham', Georgia, serif;
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+/* ── Info bar (Vol, date, edition) ── */
+.nyt-info-bar {
+  font-family: 'Libre Franklin', Arial, sans-serif;
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border-top: 3px double #111;
+  border-bottom: 1px solid #111;
+}
+
+/* ── Masthead ── */
+.nyt-masthead {
+  text-align: center;
+  padding-bottom: 0;
+}
+.nyt-masthead h1 {
+  font-family: 'UnifrakturCook', 'cheltenhamclassic', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+/* Triple-rule pattern: thick 3px + gap 1px + thin 1px */
+.nyt-masthead-rule {
+  height: 3px;
+  background: #111;
+}
+.nyt-masthead-rule-gap {
+  height: 2px;
+  background: transparent;
+}
+.nyt-masthead-rule-thin {
+  height: 1px;
+  background: #aaa;
+}
+.nyt-masthead-rule-bold {
+  height: 2px;
+  background: #111;
+}
+
+/* ── Section banner — newspaper section divider ── */
+.nyt-section-banner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-top: 3px solid #111;
+  border-bottom: 1px solid #111;
+  padding: 0.25rem 0.5rem;
+  margin: 2.5rem 0 1.5rem;
+}
+.nyt-section-banner span {
+  font-family: "ITC Cheltenham", "Cheltenham", 'cheltenhamclassic', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.005em;
+  color: #111;
+}
+
+/* ── Vertical dividers (desktop) ── */
+.nyt-vdivider {
+  width: 1px;
+  background: hsl(var(--border));
+  align-self: stretch;
+  display: none;
+}
+@media (min-width: 1024px) {
+  .nyt-vdivider { display: block; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   NYT Clone Layout — Main + Aside 2-column grid
+   ═══════════════════════════════════════════════════════ */
+
+/* Page grid: main (2/3) + aside (1/3) */
+.nyt-page-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 1024px) {
+  .nyt-page-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+/* Main column — border-right separates from aside */
+.nyt-main-col {
+  padding-right: 0;
+}
+@media (min-width: 1024px) {
+  .nyt-main-col {
+    border-right: 1px solid #979797;
+    padding-right: 1.5rem;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Aside column — sticky so right side is never empty */
+.nyt-aside-col {
+  padding-left: 0;
+  padding-top: 1.5rem;
+}
+@media (min-width: 1024px) {
+  .nyt-aside-col {
+    padding-left: 1.5rem;
+    padding-top: 0;
+    position: sticky;
+    top: 88px;
+    align-self: start;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.2) transparent;
+  }
+}
+
+/* Article row: text (35%) + image (65%) — core NYT pattern */
+.nyt-article-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  border-bottom: 2px solid #222;
+  padding: 2rem 0 2.5rem;
+}
+@media (min-width: 640px) {
+  .nyt-article-row {
+    grid-template-columns: 35% 1fr;
+    gap: 0;
+  }
+}
+/* Distinct black line between text column and image column */
+@media (min-width: 640px) {
+  .nyt-article-row > figure {
+    border-left: 2px solid #111;
+    padding-left: 1.25rem;
+  }
+}
+.nyt-article-row:first-child {
+  padding-top: 0.5rem;
+}
+
+/* Lead article variant */
+.nyt-article-row.nyt-lead {
+  padding-bottom: 2.25rem;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.nyt-article-row.nyt-lead .nyt-lead-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+  padding: 2rem 1.5rem;
+  color: white;
+  z-index: 10;
+}
+.nyt-article-row.nyt-lead .nyt-lead-image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+.nyt-article-row.nyt-lead .nyt-lead-label {
+  color: #f2e9d6;
+}
+.nyt-article-row.nyt-lead h3 {
+  color: white;
+  margin: 0;
+}
+
+/* Topic links strip between article groups */
+.nyt-topic-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+}
+.nyt-topic-link {
+  font-family: "Franklin Gothic Medium", "Franklin Gothic", 'Libre Franklin', Arial, sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #333;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.nyt-topic-link:hover {
+  background: #f0f0f0;
+}
+
+/* Opinion item in aside: text + article thumbnail */
+.nyt-opinion-item {
+  display: grid;
+  grid-template-columns: 1fr 76px;
+  gap: 0.875rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.13);
+  align-items: start;
+}
+.nyt-opinion-item:last-child {
+  border-bottom: none;
+}
+
+/* Small two-column pair at bottom of aside */
+.nyt-small-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  border-top: 1px solid #333;
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Aside section header */
+.nyt-aside-section-header {
+  font-family: "Franklin Gothic Medium", "Franklin Gothic", 'Libre Franklin', Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #333;
+  border-bottom: 2px solid #111;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Aside article (stacked: image on top, text below) */
+.nyt-aside-article {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+  margin-bottom: 0;
+}
+.nyt-aside-article:last-child {
+  border-bottom: none;
+}
+
+/* Stacked items in a column — auto internal divider */
+.nyt-col-item + .nyt-col-item {
+  border-top: 1px solid #ddd;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+/* ── Article card hover ── */
+.nyt-card {
+  transition: background 0.18s ease, opacity 0.18s ease;
+}
+.nyt-card:hover {
+  background: rgba(0, 0, 0, 0.03);
+  opacity: 1;
+}
+.nyt-card img { transition: transform 0.5s ease; }
+.nyt-card:hover img { transform: scale(1.02); }
+
+/* ════════════════════════════════════════════════════════
+   VINTAGE NEWSPAPER PAPER BACKGROUND
+   ════════════════════════════════════════════════════════ */
+
+/* Base paper color */
+.nyt-paper-bg {
+  background-color: #f2e9d6;
+  /* Subtle grain texture via SVG noise pattern */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Masthead section — same paper color as the rest of the page */
+.nyt-masthead-bg {
+  background-color: #f2e9d6;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Navbar override — blend into the vintage paper on the newspaper page */
+.nyt-paper-bg nav.fixed {
+  background-color: rgba(242, 233, 214, 0.97) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Article row — warmer border to match paper */
+.nyt-article-row {
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Give each article row a gentle editorial padding */
+.nyt-article-row {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+/* Main/aside column separator */
+@media (min-width: 1024px) {
+  .nyt-main-col {
+    border-right-color: rgba(0, 0, 0, 0.18);
+  }
+}
+
+/* Aside article dividers */
+.nyt-aside-article {
+  border-bottom-color: rgba(0, 0, 0, 0.14);
+}
+
+/* Opinion item dividers */
+.nyt-opinion-item {
+  border-bottom-color: rgba(0, 0, 0, 0.12);
+}
+
+/* Topic links strip — warm toned */
+.nyt-topic-links {
+  border-top-color: rgba(0, 0, 0, 0.14);
+  border-bottom-color: rgba(0, 0, 0, 0.14);
+  background: rgba(0, 0, 0, 0.02);
+}
+.nyt-topic-link {
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #2a2a2a;
+}
+.nyt-topic-link:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Small pair top border */
+.nyt-small-pair {
+  border-top-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Aside section header — warm tone */
+.nyt-aside-section-header {
+  border-bottom-color: #2a1f0e;
+  color: #2a1f0e;
+}
+
+/* Body text — warm dark gray on paper */
+.nyt-article-body {
+  color: #2e2b26;
+}
+
+/* Byline */
+.nyt-byline {
+  color: #5a5043;
+}
+
+/* Masthead rule strips — stronger on paper */
+.nyt-masthead-rule {
+  border-color: #1a1310;
+}
+
+/* Newsletter CTA — paper-toned background */
+.nyt-newsletter-aside {
+  background: rgba(0, 0, 0, 0.025);
+  border-radius: 2px;
+  padding: 2rem;
+}
+.nyt-newsletter-aside input {
+  background: #fdf8f0;
+}
+
+/* ── Horizontal rules ── */
+.nyt-hr {
+  border: none;
+  height: 1px;
+  background: hsl(var(--border));
+}
+.nyt-hr-bold {
+  border: none;
+  height: 2px;
+  background: hsl(var(--foreground));
+}
+
+/* ── Aside column headlines ── */
+.nyt-aside-headline {
+  font-family: "ITC Cheltenham", "Cheltenham", 'cheltenhamclassic', Georgia, serif;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* ── Sidebar column dividers ── */
+.nyt-sidebar-list article + article {
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
