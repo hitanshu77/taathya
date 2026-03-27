@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 .env
+Properties-Page/config.js
+*.bundle
 
 # Editor directories and files
 .vscode/*
